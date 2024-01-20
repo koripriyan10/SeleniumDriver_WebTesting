@@ -55,8 +55,11 @@ public class WebElementLocators {
 	public static By ModalButtonlnk2 = By.xpath("//a[@data-toggle='modal' and @href='#myModal2']");
 	public static By MultiModalButtonlnk = By.xpath("//a[@data-toggle='modal' and @href='#myModalMulti']");
 	public static By ModalWindowTitle = By.xpath("//h4[@class='modal-title' and contains(text(),'Modal title')]");
+	public static By FirstModal = By.xpath("//h4[@class='modal-title' and contains(text(),'First Modal')]");
+	public static By SecondModal = By.xpath("//h4[@class='modal-title' and contains(text(),'Modal 2')]");
 	public static By ModalCloseBtn = By.xpath("//div[@class='modal-footer']/button[@data-dismiss='modal' and contains(text(),'Close')]");
 	public static By CloselnkModal2 = By.xpath("//a[contains(text(),'Close')]");
+	public static By MyModalMultiClose = By.xpath("//div[@id='myModalMulti']/div[@class='modal-dialog']/div[@class='modal-content']/div[@class='modal-footer']/a[@data-dismiss='modal' and contains(text(),'Close')]");
 	
 	public static By Registerlink = By.xpath("//a[contains(text(),'REGISTER')]");
 	public static By firstName = By.xpath("//input[@name='firstName']");

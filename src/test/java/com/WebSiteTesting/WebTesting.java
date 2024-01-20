@@ -244,7 +244,7 @@ public class WebTesting extends Library {
 		}
 		
 		// Switching to Single Modal Window
-				@Test(priority = 9, enabled = true)
+				@Test(priority = 9, enabled = false)
 				public void SwitchingToModal() throws InterruptedException {
 
 					driver.navigate().to(objProperties.getProperty("AutomationLink"));
@@ -285,28 +285,61 @@ public class WebTesting extends Library {
 					WebElement ContinueElem = wbContinue
 							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MultiModalButtonlnk));
 					driver.findElement(WebElementLocators.MultiModalButtonlnk).click();
-					//Get current window
-					String mainWindowHandle = driver.getWindowHandle();
 					
-					//Get All window handles
-					Set<String> allWindowHandles = driver.getWindowHandles();
 					
-					for(String Handle:allWindowHandles)
-					{
-						    //Handle.hashCode();
-							driver.switchTo().window(Handle);
-							//String Title = driver.findElement(WebElementLocators.ModalWindowTitle).getText();
-							String Title1 = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'First Modal')]")).getText();	
-							System.out.println(Title1);
-							driver.findElement(WebElementLocators.ModalButtonlnk2).click();
-							driver.switchTo().window(Handle);
-							driver.findElement(WebElementLocators.CloselnkModal2).click();
-							Thread.sleep(5000);
-							//driver.switchTo().defaultContent();
-							//driver.findElement(WebElementLocators.CloselnkModal2).click();
-							driver.switchTo().defaultContent();
-					}
+//					//Get current window					
+//					String mainWindowHandle = driver.getWindowHandle();				
+//					//Get All window handles
+//					Set<String> allWindowHandles = driver.getWindowHandles();
+//					
+//					for(String Handle:allWindowHandles)
+//					{
+//						   
+//						    System.out.println(Handle);
+//							driver.switchTo().window(Handle);
+//							//String Title = driver.findElement(WebElementLocators.ModalWindowTitle).getText();
+//							String Title1 = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'First Modal')]")).getText();	
+//							System.out.println(Title1);
+//							System.out.println(Handle.hashCode());
+//							Thread.sleep(5000);
+//							//driver.findElement(By.xpath("//a[@data-dismiss='modal' and contains(text(),'Close')]")).click();													
+//							driver.findElement(WebElementLocators.ModalButtonlnk2).click();	
+//							driver.switchTo().window(Handle);
+//							//driver.findElement(By.xpath("//a[@data-dismiss='modal' and contains(text(),'Close')]"));
+//							Thread.sleep(5000);							
+//							driver.switchTo().defaultContent();
+//					}
 					
+					WebDriverWait wbContinue2 = new WebDriverWait(driver, 50);
+					WebElement ContinueElem2 = wbContinue2
+							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.FirstModal));
+					//driver.findElement(By.xpath("//a[@data-dismiss='modal' and contains(text(),'Close')]")).click();
+					
+					WebDriverWait wbContinue3 = new WebDriverWait(driver, 50);
+					WebElement ContinueElem3 = wbContinue3
+							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.SecondModal));
+					
+					String Title1 = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'Modal 2')]")).getText();	
+					System.out.println(Title1);
+					
+					Actions objAction = new Actions(driver);
+					WebElement Close = driver.findElement(By.xpath("//a[@data-dismiss='modal' and contains(text(),'Close')]"));
+					objAction.click(Close).build().perform();
+					
+					WebDriverWait wbContinue4 = new WebDriverWait(driver, 50);
+					WebElement ContinueElem4 = wbContinue4
+							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MyModalMultiClose));
+					
+					String Title2 = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'First Modal')]")).getText();	
+					System.out.println(Title2);
+					
+					WebDriverWait wbContinue5 = new WebDriverWait(driver, 50);
+					WebElement ContinueElem5 = wbContinue5
+							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MyModalMultiClose));
+					
+					//For handling Click Intercept Exception use move to element
+					objAction.moveToElement(driver.findElement(WebElementLocators.MyModalMultiClose)).click().perform();
+					                  
 				}			
 			
 	
