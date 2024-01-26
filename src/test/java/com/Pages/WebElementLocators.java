@@ -60,7 +60,7 @@ public class WebElementLocators {
 	public static By ModalCloseBtn = By.xpath("//div[@class='modal-footer']/button[@data-dismiss='modal' and contains(text(),'Close')]");
 	public static By CloselnkModal2 = By.xpath("//a[contains(text(),'Close')]");
 	public static By MyModalMultiClose = By.xpath("//div[@id='myModalMulti']/div[@class='modal-dialog']/div[@class='modal-content']/div[@class='modal-footer']/a[@data-dismiss='modal' and contains(text(),'Close')]");
-	
+	public static By PracticeSiteLink = By.xpath("//title[contains(text(),'Automation Practice Site')]");
 	public static By Registerlink = By.xpath("//a[contains(text(),'REGISTER')]");
 	public static By firstName = By.xpath("//input[@name='firstName']");
 	public static By lastName = By.xpath("//input[@name='lastName']");

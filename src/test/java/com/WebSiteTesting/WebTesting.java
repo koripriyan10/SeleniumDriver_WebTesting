@@ -3,16 +3,26 @@ package com.WebSiteTesting;
 import org.testng.annotations.Test;
 
 import com.Utility.Library;
+import com.google.common.io.Files;
 
 import org.testng.annotations.BeforeTest;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
+import java.util.*;
 import java.util.List;
 import java.util.Set;
+import org.apache.commons.*;
+import org.apache.commons.io.FileUtils;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -35,7 +45,7 @@ public class WebTesting extends Library {
 	@BeforeSuite
 	public void beforeSuite() throws IOException {
 		ReadPropertiesFile();
-		System.setProperty("webdriver.gecko.driver",objProperties.getProperty("FireFoxDriverPath"));
+		System.setProperty("webdriver.gecko.driver", objProperties.getProperty("FireFoxDriverPath"));
 		driver = new FirefoxDriver();
 		driver.manage().window().maximize();
 	}
@@ -108,185 +118,239 @@ public class WebTesting extends Library {
 		try {
 			driver.navigate().to(objProperties.getProperty("DatePickerLink"));
 			WebDriverWait wbContinue = new WebDriverWait(driver, 50);
-			WebElement ContinueElem = wbContinue.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.DatePicker));
-			driver.findElement(WebElementLocators.DatePicker).click();		
+			WebElement ContinueElem = wbContinue
+					.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.DatePicker));
+			driver.findElement(WebElementLocators.DatePicker).click();
 			driver.findElement(WebElementLocators.DateSel).click();
 		}
 
 		catch (StaleElementReferenceException e) {
 			WebElement SelMonthYear = driver.findElement(WebElementLocators.MonthYearSel);
 
-			Actions objAction = new Actions(driver);			
+			Actions objAction = new Actions(driver);
 			int clicks = 5;
 
 			for (int i = 0; i < clicks; i++) {
 				objAction.click(SelMonthYear).build().perform();
 			}
-			
-			
 
 		}
 	}
-	
-	@Test(priority = 5,enabled=false)
+
+	@Test(priority = 5, enabled = false)
 	public void RadioAndCheckBoxValidate() throws InterruptedException {
-		
+
 		driver.navigate().to(objProperties.getProperty("NewToursLink"));
-        driver.findElement(WebElementLocators.SeleniumLink).click();
-        Thread.sleep(5000);      
+		driver.findElement(WebElementLocators.SeleniumLink).click();
+		Thread.sleep(5000);
 //        WebDriverWait wbContinue = new WebDriverWait(driver, 50);
 //		WebElement ContinueElem = wbContinue
 //				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(text(),'Radio & Checkbox Demo')]")));
-        driver.findElement(WebElementLocators.RadioAndCheckBoxLink).click();
-        
-        WebDriverWait wbContinue2 = new WebDriverWait(driver, 50);
-		WebElement ContinueElem2 = wbContinue2.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.RadioOption2));
-        
+		driver.findElement(WebElementLocators.RadioAndCheckBoxLink).click();
+
+		WebDriverWait wbContinue2 = new WebDriverWait(driver, 50);
+		WebElement ContinueElem2 = wbContinue2
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.RadioOption2));
+
 		Thread.sleep(5000);
-		
+
 		driver.findElement(WebElementLocators.RadioOption2).click();
-        driver.findElement(WebElementLocators.CheckBoxOption3).click();
-        
-        WebElement OptionValue =   driver.findElement(WebElementLocators.RadioOption2);
-        WebElement CheckboxValue =    driver.findElement(WebElementLocators.CheckBoxOption3);
-        String OptVal =  OptionValue.getAttribute("value");
-        String CheckBoxVal =  CheckboxValue.getAttribute("value");
-        
-        System.out.println("OptionValue-"+OptVal);
-        System.out.println("CheckboxValue-"+CheckBoxVal);
-        
-        WebElement Radiobutton1 = driver.findElement(WebElementLocators.RadioOption1);
-        WebElement Radiobutton2 = driver.findElement(WebElementLocators.RadioOption2);
-        WebElement Radiobutton3 = driver.findElement(WebElementLocators.RadioOption3);
-        
-        WebElement CheckBox1 = driver.findElement(WebElementLocators.CheckBoxOption1);
-        WebElement CheckBox2 = driver.findElement(WebElementLocators.CheckBoxOption2);
-        WebElement CheckBox3 = driver.findElement(WebElementLocators.CheckBoxOption3);
-        
-        if(Radiobutton1.isSelected()) {System.out.println("Option 1 Selected");}      
-        if(Radiobutton2.isSelected()){System.out.println("Option 2 Selected");}    
-        if(Radiobutton3.isSelected()){System.out.println("Option 3 Selected");}     
-        if(CheckBox1.isSelected()){System.out.println("checkbox 1 Selected");}      
-        if(CheckBox2.isSelected()){System.out.println("checkbox 2 Selected");}       
-        if(CheckBox3.isSelected()){System.out.println("checkbox 3 Selected");}
-        
-		
+		driver.findElement(WebElementLocators.CheckBoxOption3).click();
+
+		WebElement OptionValue = driver.findElement(WebElementLocators.RadioOption2);
+		WebElement CheckboxValue = driver.findElement(WebElementLocators.CheckBoxOption3);
+		String OptVal = OptionValue.getAttribute("value");
+		String CheckBoxVal = CheckboxValue.getAttribute("value");
+
+		System.out.println("OptionValue-" + OptVal);
+		System.out.println("CheckboxValue-" + CheckBoxVal);
+
+		WebElement Radiobutton1 = driver.findElement(WebElementLocators.RadioOption1);
+		WebElement Radiobutton2 = driver.findElement(WebElementLocators.RadioOption2);
+		WebElement Radiobutton3 = driver.findElement(WebElementLocators.RadioOption3);
+
+		WebElement CheckBox1 = driver.findElement(WebElementLocators.CheckBoxOption1);
+		WebElement CheckBox2 = driver.findElement(WebElementLocators.CheckBoxOption2);
+		WebElement CheckBox3 = driver.findElement(WebElementLocators.CheckBoxOption3);
+
+		if (Radiobutton1.isSelected()) {
+			System.out.println("Option 1 Selected");
+		}
+		if (Radiobutton2.isSelected()) {
+			System.out.println("Option 2 Selected");
+		}
+		if (Radiobutton3.isSelected()) {
+			System.out.println("Option 3 Selected");
+		}
+		if (CheckBox1.isSelected()) {
+			System.out.println("checkbox 1 Selected");
+		}
+		if (CheckBox2.isSelected()) {
+			System.out.println("checkbox 2 Selected");
+		}
+		if (CheckBox3.isSelected()) {
+			System.out.println("checkbox 3 Selected");
+		}
+
 	}
-	
-	@Test(priority = 6,enabled=false)
-	public void Slider()  {
-		driver.navigate().to(objProperties.getProperty("SliderLink"));	
-		WebElement slider = driver.findElement(WebElementLocators.Slider); // Replace "slider-id" with the actual ID of your slider element
+
+	@Test(priority = 6, enabled = false)
+	public void Slider() {
+		driver.navigate().to(objProperties.getProperty("SliderLink"));
+		WebElement slider = driver.findElement(WebElementLocators.Slider); // Replace "slider-id" with the actual ID of
+																			// your slider element
 		int sliderWidth = 80;
 		Actions actions = new Actions(driver);
 		actions.clickAndHold(slider).moveByOffset(sliderWidth, 0).release().perform();
 
 	}
-	
-	@Test(priority = 7,enabled=false)
-	public void Resizable()  {
+
+	@Test(priority = 7, enabled = false)
+	public void Resizable() {
 		driver.navigate().to(objProperties.getProperty("ResizeableLink"));
-		
-		WebElement divElement = driver.findElement(WebElementLocators.ResizeElement); // Replace "slider-id" with the actual ID of your slider element
+
+		WebElement divElement = driver.findElement(WebElementLocators.ResizeElement); // Replace "slider-id" with the
+																						// actual ID of your slider
+																						// element
 		resizeDivWithActions(driver, divElement, 50, 30);
 	}
-	
+
 	// Alert Popup, Prompt Window
-		@Test(priority = 8, enabled = false)
-		public void AlertWindow() throws InterruptedException {
-			driver.navigate().to(objProperties.getProperty("AutomationLink"));
-			driver.findElement(WebElementLocators.SwitchToLink).click();
+	@Test(priority = 8, enabled = false)
+	public void AlertWindow() throws InterruptedException {
+		driver.navigate().to(objProperties.getProperty("AutomationLink"));
+		driver.findElement(WebElementLocators.SwitchToLink).click();
 //			Thread.sleep(5000);
-			WebDriverWait wbContinue = new WebDriverWait(driver, 50);
-			WebElement ContinueElem = wbContinue
-					.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.AlertsLink));
-			driver.findElement(WebElementLocators.AlertsLink).click();
-			WebDriverWait wbContinue2 = new WebDriverWait(driver, 50);
-			WebElement ContinueElem2 = wbContinue
-					.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.AlertsButtonlnk));
-			driver.findElement(WebElementLocators.AlertsButtonlnk).click();
-			Alert alert = driver.switchTo().alert();
-			Thread.sleep(3000);
-			alert.accept();
-			driver.findElement(WebElementLocators.AlertWithOkAndCancel).click();
-			driver.findElement(WebElementLocators.AlertsWithConfirmButtonlnk).click();
-			alert.accept();
-			driver.findElement(WebElementLocators.AlertWithTextBox).click();
-			driver.findElement(WebElementLocators.AlertsWithPromptlnk).click();
-			alert.sendKeys("");
-			Thread.sleep(5000);
-			alert.sendKeys("This is test");
-			alert.accept();
-			driver.findElement(WebElementLocators.AlertsWithPromptlnk).click();
-			Thread.sleep(5000);
-			alert.dismiss();
+		WebDriverWait wbContinue = new WebDriverWait(driver, 50);
+		WebElement ContinueElem = wbContinue
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.AlertsLink));
+		driver.findElement(WebElementLocators.AlertsLink).click();
+		WebDriverWait wbContinue2 = new WebDriverWait(driver, 50);
+		WebElement ContinueElem2 = wbContinue
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.AlertsButtonlnk));
+		driver.findElement(WebElementLocators.AlertsButtonlnk).click();
+		Alert alert = driver.switchTo().alert();
+		Thread.sleep(3000);
+		alert.accept();
+		driver.findElement(WebElementLocators.AlertWithOkAndCancel).click();
+		driver.findElement(WebElementLocators.AlertsWithConfirmButtonlnk).click();
+		alert.accept();
+		driver.findElement(WebElementLocators.AlertWithTextBox).click();
+		driver.findElement(WebElementLocators.AlertsWithPromptlnk).click();
+		alert.sendKeys("");
+		Thread.sleep(5000);
+		alert.sendKeys("This is test");
+		alert.accept();
+		driver.findElement(WebElementLocators.AlertsWithPromptlnk).click();
+		Thread.sleep(5000);
+		alert.dismiss();
+	}
+
+	// Switching to Frame
+	@Test(priority = 9, enabled = false)
+	public void SwitchingToFrame() throws InterruptedException {
+
+		driver.navigate().to(objProperties.getProperty("AutomationLink"));
+		driver.findElement(WebElementLocators.SwitchToLink).click();
+		driver.findElement(WebElementLocators.Frameslnk).click();
+		WebDriverWait wbContinue = new WebDriverWait(driver, 50);
+		WebElement ContinueElem = wbContinue
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.SingleIframelnk));
+		driver.findElement(WebElementLocators.IframeIframelnk).click();
+		WebElement Multiframeelem = driver.findElement(WebElementLocators.MultiFrame);
+
+		driver.switchTo().frame(Multiframeelem);
+		WebElement Singleeelem = driver.findElement(WebElementLocators.SingleFrame);
+		driver.switchTo().frame(Singleeelem);
+		Thread.sleep(2000);
+		driver.findElement(WebElementLocators.TextBoxInsideFrame).sendKeys("Test");
+		driver.switchTo().defaultContent();
+	}
+
+	// Switching to Single Modal Window
+	@Test(priority = 9, enabled = false)
+	public void SwitchingToModal() throws InterruptedException {
+
+		driver.navigate().to(objProperties.getProperty("AutomationLink"));
+		driver.findElement(WebElementLocators.Morelnk).click();
+		driver.findElement(WebElementLocators.Modallnk).click();
+		WebDriverWait wbContinue = new WebDriverWait(driver, 50);
+		WebElement ContinueElem = wbContinue
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.ModalButtonlnk));
+		driver.findElement(WebElementLocators.ModalButtonlnk).click();
+		// Get current window
+		String mainWindowHandle = driver.getWindowHandle();
+
+		// Get All window handles
+		Set<String> allWindowHandles = driver.getWindowHandles();
+
+		for (String Handle : allWindowHandles) {
+			// Handle.hashCode();
+			driver.switchTo().window(Handle);
+			// String Title =
+			// driver.findElement(WebElementLocators.ModalWindowTitle).getText();
+			String Title = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'Modal title')]"))
+					.getText();
+			System.out.println("Title-" + Title);
+			// driver.findElement(WebElementLocators.ModalCloseBtn).click();
+
 		}
 
-		// Switching to Frame
-		@Test(priority = 9, enabled = false)
-		public void SwitchingToFrame() throws InterruptedException {
+	}
 
-			driver.navigate().to(objProperties.getProperty("AutomationLink"));
-			driver.findElement(WebElementLocators.SwitchToLink).click();
-			driver.findElement(WebElementLocators.Frameslnk).click();
-			WebDriverWait wbContinue = new WebDriverWait(driver, 50);
-			WebElement ContinueElem = wbContinue
-					.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.SingleIframelnk));
-			driver.findElement(WebElementLocators.IframeIframelnk).click();
-			WebElement Multiframeelem = driver.findElement(WebElementLocators.MultiFrame);
+	// Switching to Multiple Modal Window
 
-			driver.switchTo().frame(Multiframeelem);
-			WebElement Singleeelem = driver.findElement(WebElementLocators.SingleFrame);
-			driver.switchTo().frame(Singleeelem);
-			Thread.sleep(2000);
-			driver.findElement(WebElementLocators.TextBoxInsideFrame).sendKeys("Test");
-			driver.switchTo().defaultContent();
-		}
-		
-		// Switching to Single Modal Window
-				@Test(priority = 9, enabled = false)
-				public void SwitchingToModal() throws InterruptedException {
+	@Test(priority = 10, enabled = false)
+	public void SwitchingToMultipleModal() throws InterruptedException {
 
-					driver.navigate().to(objProperties.getProperty("AutomationLink"));
-					driver.findElement(WebElementLocators.Morelnk).click();
-					driver.findElement(WebElementLocators.Modallnk).click();
-					WebDriverWait wbContinue = new WebDriverWait(driver, 50);
-					WebElement ContinueElem = wbContinue
-							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.ModalButtonlnk));
-					driver.findElement(WebElementLocators.ModalButtonlnk).click();
-					//Get current window
-					String mainWindowHandle = driver.getWindowHandle();
-					
-					//Get All window handles
-					Set<String> allWindowHandles = driver.getWindowHandles();
-					
-					for(String Handle:allWindowHandles)
-					{
-						    //Handle.hashCode();
-							driver.switchTo().window(Handle);
-							//String Title = driver.findElement(WebElementLocators.ModalWindowTitle).getText();
-							String Title = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'Modal title')]")).getText();	
-							System.out.println("Title-" +Title);
-							//driver.findElement(WebElementLocators.ModalCloseBtn).click();
-							
-					}
-					
-				}
-				
-				// Switching to Multiple Modal Window
-				
-				@Test(priority = 10, enabled = true)
-				public void SwitchingToMultipleModal() throws InterruptedException {
+		driver.navigate().to(objProperties.getProperty("AutomationLink"));
+		driver.findElement(WebElementLocators.Morelnk).click();
+		driver.findElement(WebElementLocators.Modallnk).click();
+		WebDriverWait wbContinue = new WebDriverWait(driver, 50);
+		WebElement ContinueElem = wbContinue
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MultiModalButtonlnk));
+		driver.findElement(WebElementLocators.MultiModalButtonlnk).click();
 
-					driver.navigate().to(objProperties.getProperty("AutomationLink"));
-					driver.findElement(WebElementLocators.Morelnk).click();
-					driver.findElement(WebElementLocators.Modallnk).click();
-					WebDriverWait wbContinue = new WebDriverWait(driver, 50);
-					WebElement ContinueElem = wbContinue
-							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MultiModalButtonlnk));
-					driver.findElement(WebElementLocators.MultiModalButtonlnk).click();
-					
-					
+		WebDriverWait wbContinue2 = new WebDriverWait(driver, 50);
+		WebElement ContinueElem2 = wbContinue2
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.FirstModal));
+		// driver.findElement(By.xpath("//a[@data-dismiss='modal' and
+		// contains(text(),'Close')]")).click();
+
+		WebDriverWait wbContinue3 = new WebDriverWait(driver, 50);
+		WebElement ContinueElem3 = wbContinue3
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.SecondModal));
+
+		String Title1 = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'Modal 2')]"))
+				.getText();
+		System.out.println(Title1);
+
+		Actions objAction = new Actions(driver);
+		WebElement Close = driver.findElement(By.xpath("//a[@data-dismiss='modal' and contains(text(),'Close')]"));
+		objAction.click(Close).build().perform();
+
+		WebDriverWait wbContinue4 = new WebDriverWait(driver, 50);
+		WebElement ContinueElem4 = wbContinue4
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MyModalMultiClose));
+
+		String Title2 = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'First Modal')]"))
+				.getText();
+		System.out.println(Title2);
+
+		WebDriverWait wbContinue5 = new WebDriverWait(driver, 50);
+		WebElement ContinueElem5 = wbContinue5
+				.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MyModalMultiClose));
+
+		// For handling Click Intercept Exception use move to element
+		objAction.moveToElement(driver.findElement(WebElementLocators.MyModalMultiClose)).click().perform();
+
+	}
+
+	// Switching to Multiple Window
+
+	@Test(priority = 10, enabled = false)
+	public void SwitchingToMultipleWindow() throws InterruptedException {
+
 //					//Get current window					
 //					String mainWindowHandle = driver.getWindowHandle();				
 //					//Get All window handles
@@ -309,45 +373,84 @@ public class WebTesting extends Library {
 //							Thread.sleep(5000);							
 //							driver.switchTo().defaultContent();
 //					}
-					
-					WebDriverWait wbContinue2 = new WebDriverWait(driver, 50);
-					WebElement ContinueElem2 = wbContinue2
-							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.FirstModal));
-					//driver.findElement(By.xpath("//a[@data-dismiss='modal' and contains(text(),'Close')]")).click();
-					
-					WebDriverWait wbContinue3 = new WebDriverWait(driver, 50);
-					WebElement ContinueElem3 = wbContinue3
-							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.SecondModal));
-					
-					String Title1 = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'Modal 2')]")).getText();	
-					System.out.println(Title1);
-					
-					Actions objAction = new Actions(driver);
-					WebElement Close = driver.findElement(By.xpath("//a[@data-dismiss='modal' and contains(text(),'Close')]"));
-					objAction.click(Close).build().perform();
-					
-					WebDriverWait wbContinue4 = new WebDriverWait(driver, 50);
-					WebElement ContinueElem4 = wbContinue4
-							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MyModalMultiClose));
-					
-					String Title2 = driver.findElement(By.xpath("//h4[@class='modal-title' and contains(text(),'First Modal')]")).getText();	
-					System.out.println(Title2);
-					
-					WebDriverWait wbContinue5 = new WebDriverWait(driver, 50);
-					WebElement ContinueElem5 = wbContinue5
-							.until(ExpectedConditions.visibilityOfElementLocated(WebElementLocators.MyModalMultiClose));
-					
-					//For handling Click Intercept Exception use move to element
-					objAction.moveToElement(driver.findElement(WebElementLocators.MyModalMultiClose)).click().perform();
-					                  
-				}			
-			
+	}
+
+    // Taking screenshot
+
+	@Test(priority = 11, enabled = false)
+ 	public void TakingScreenShot() throws InterruptedException, IOException {
+        driver.navigate().to(objProperties.getProperty("AutomationLink"));
+        driver.findElement(By.xpath("//a[contains(text(),'Practice Site')]")).click();
+        
+    
+ 		File objname = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+ 		FileUtils.copyFile(objname, new File("E:\\Software Testing\\From Accord Info Matrix\\demoqa.png"));
+	}
 	
+    // Java Robot class
+
+	@Test(priority = 12, enabled = false)
+ 	public void Robot_Automate() throws InterruptedException, IOException, AWTException {
+		
+		driver.navigate().to(objProperties.getProperty("AmazonLink"));
+		driver.manage().window().maximize();		
+        Robot rbt = new Robot();
+        rbt.keyPress(KeyEvent.VK_TAB);
+        Thread.sleep(2000);
+        rbt.keyPress(KeyEvent.VK_TAB);
+        Thread.sleep(2000);
+        rbt.keyPress(KeyEvent.VK_TAB);
+        Thread.sleep(2000);
+        rbt.keyPress(KeyEvent.VK_TAB);
+        Thread.sleep(2000);
+        rbt.keyPress(KeyEvent.VK_TAB);
+        Thread.sleep(2000);
+        rbt.keyPress(KeyEvent.VK_L);
+        rbt.keyPress(KeyEvent.VK_E);
+        rbt.keyPress(KeyEvent.VK_D);
+        rbt.keyPress(KeyEvent.VK_L);
+        rbt.keyPress(KeyEvent.VK_A);
+        rbt.keyPress(KeyEvent.VK_M);
+        rbt.keyPress(KeyEvent.VK_P);
+        rbt.keyPress(KeyEvent.VK_TAB);
+        rbt.keyPress(KeyEvent.VK_ENTER);
+	}
+
+	// Window Handling
+	
+	@Test(priority = 13, enabled = true)
+ 	public void WindowHandle() throws InterruptedException, IOException, AWTException {
+		
+		driver.navigate().to("https://demoqa.com/browser-windows");
+		driver.findElement(By.id("tabButton")).click();
+		String MainId = driver.getWindowHandle();
+		System.out.println("MainId:"+MainId);
+		Set<String> AllWindow = driver.getWindowHandles();
+		
+		for(String a:AllWindow)
+		{
+			if(!a.equals(MainId))
+			{
+				System.out.println("ChildWindow");
+				driver.switchTo().window(a);
+				Thread.sleep(5000);
+				//driver.findElement(By.xpath("//h1[contains(text(),'This is a')]")).getText();
+				WebElement h1Element = driver.findElement(By.tagName("h1"));
+				String h1text = h1Element.getText();
+				System.out.println("HeadingElement:"+h1text);
+				
+			}
+			
+		}
+		
+	}
+
+
 	private static void resizeDivWithActions(WebDriver driver, WebElement element, int xOffset, int yOffset) {
-        Actions builder = new Actions(driver);
-        builder.clickAndHold(element).moveByOffset(xOffset, yOffset).release().perform();
-        System.out.println("resize");
-    }
+		Actions builder = new Actions(driver);
+		builder.clickAndHold(element).moveByOffset(xOffset, yOffset).release().perform();
+		System.out.println("resize");
+	}
 
 	@BeforeTest
 	public void beforeTest() {

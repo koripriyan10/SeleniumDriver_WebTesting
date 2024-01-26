@@ -5,9 +5,9 @@
     <classes>
       <class name="com.WebSiteTesting.WebTesting">
         <methods>
-          <include name="SwitchingToMultipleModal"/>
           <include name="beforeSuite"/>
           <include name="beforeTest"/>
+          <include name="WindowHandle"/>
         </methods>
       </class> <!-- com.WebSiteTesting.WebTesting -->
     </classes>
