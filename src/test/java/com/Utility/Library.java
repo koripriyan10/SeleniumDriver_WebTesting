@@ -23,7 +23,7 @@ public class Library {
 		
 		try
 		{
-			File fs = new File("D:\\JavaWorkSpace\\Selenium_Projects\\src\\test\\resources\\Config.properties");
+			File fs = new File("D:\\JavaWorkSpace\\WebTesting_Project\\src\\test\\resources\\Config.properties");
 			FileInputStream objInputStream;
 			objInputStream = new FileInputStream(fs);
 			objProperties = new Properties();
@@ -37,23 +37,24 @@ public class Library {
 	}
 	
 	public static void LaunchBrowser() {
-		System.out.println("LauchBrowser");
+		System.out.println("LaunchBrowser");
 		String browserFromPropertiesFile = objProperties.getProperty("browser");
 		System.out.println(browserFromPropertiesFile);
 		
 		switch (browserFromPropertiesFile) {
 		case "firefox":
-			System.setProperty("webdriver.gecko.driver","D:\\JavaWorkSpace\\Selenium_Projects\\src\\test\\resources\\firefoxdriver-v33\\geckodriver.exe");
+			System.setProperty("webdriver.gecko.driver",objProperties.getProperty("FireFoxDriverPath"));
 			driver = new FirefoxDriver();
 			break;
 		case "IE":
-			System.setProperty("webdriver.ie.driver","D:\\JavaWorkSpace\\Selenium_Projects\\src\\test\\resources\\IEDriver-4.14.0\\IEDriverServer.exe");
+			System.setProperty("webdriver.ie.driver",objProperties.getProperty("ConfigFile"));
 			driver = new InternetExplorerDriver();
 			break;
 			
 		case "chrome":	
 		    System.out.println("Inside case chrome");
-			System.setProperty("webdriver.chrome.driver","D:\\JavaWorkSpace\\Selenium_Projects\\src\\test\\resources\\chromedriver-v120\\chromedriver.exe");	    
+		    System.setProperty("webdriver.chrome.driver",objProperties.getProperty("ChromeDriverPath"));
+//			System.setProperty("webdriver.chrome.driver","D:\\JavaWorkSpace\\Selenium_Projects\\src\\test\\resources\\chromedriver-v120\\chromedriver.exe");	    
 //			ChromeOptions objChromeOptions = new ChromeOptions();
 //			Map<String, Object> chromePreferences = new HashMap<String, Object>();
 //			chromePreferences.put("download.default_directory", System.getProperty("user.dir"));

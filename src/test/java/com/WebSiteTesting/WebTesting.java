@@ -9,6 +9,9 @@ import org.testng.annotations.BeforeTest;
 
 import java.awt.AWTException;
 import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -17,14 +20,15 @@ import java.util.List;
 import java.util.Set;
 import org.apache.commons.*;
 import org.apache.commons.io.FileUtils;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -41,12 +45,21 @@ public class WebTesting extends Library {
 //	● Test the filling up of registration form and submission
 //	● Test frames and windows
 //	● Test drop-down menus, alert boxes
+	
+	public static WebDriver driver;
 
 	@BeforeSuite
 	public void beforeSuite() throws IOException {
+		
+	}
+	
+	@Test(priority = 0, enabled = false)
+	public void LauchBrowser() throws InterruptedException, IOException {
+		
 		ReadPropertiesFile();
-		System.setProperty("webdriver.gecko.driver", objProperties.getProperty("FireFoxDriverPath"));
-		driver = new FirefoxDriver();
+		System.setProperty("webdriver.chrome.driver", "D:\\JavaWorkSpace\\WebTesting_Project\\src\\test\\resources\\chromedriver-v121\\chromedriver.exe");
+		//driver = new FirefoxDriver();
+		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 	}
 
@@ -418,7 +431,7 @@ public class WebTesting extends Library {
 
 	// Window Handling
 	
-	@Test(priority = 13, enabled = true)
+	@Test(priority = 13, enabled = false)
  	public void WindowHandle() throws InterruptedException, IOException, AWTException {
 		
 		driver.navigate().to("https://demoqa.com/browser-windows");
@@ -441,8 +454,48 @@ public class WebTesting extends Library {
 				
 			}
 			
-		}
+		}		
+	}
+	
+	// File  Upload
+	
+	@Test(priority = 14, enabled = true)
+ 	public void FileUpload() throws InterruptedException, IOException, AWTException {
+		System.setProperty("webdriver.gecko.driver", "D:\\JavaWorkSpace\\WebTesting_Project\\src\\test\\resources\\firefoxdriver-v33\\geckodriver.exe");
+		driver = new FirefoxDriver();
+		driver.navigate().to("https://demo.automationtesting.in/FileUpload.html");
 		
+		WebElement elm = driver.findElement(By.xpath("//input[@type='file']"));
+		  
+		  JavascriptExecutor j = (JavascriptExecutor) driver;
+		  j.executeScript("arguments[0].click();", elm);
+		  
+		  File objFile = new File(System.getProperty("user.dir") + "//src//test//resources//Sample.jpg");
+		  StringSelection ObjStringSelection = new StringSelection(objFile.toString()); 
+		  Clipboard objClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		  objClipboard.setContents(ObjStringSelection, null);
+		    
+		  try
+		  {
+			  Thread.sleep(5000);
+			  Robot objRoot = new Robot();
+			  objRoot.keyPress(KeyEvent.VK_ENTER);
+			  objRoot.keyRelease(KeyEvent.VK_ENTER);
+			  objRoot.keyPress(KeyEvent.VK_CONTROL);
+			  objRoot.keyPress(KeyEvent.VK_V);
+			  
+			  objRoot.keyRelease(KeyEvent.VK_V);
+			  objRoot.keyRelease(KeyEvent.VK_CONTROL);
+
+			  
+			  objRoot.keyPress(KeyEvent.VK_ENTER);
+			  objRoot.keyRelease(KeyEvent.VK_ENTER);
+		  }
+		  
+		  catch(AWTException e)
+		  {
+			  e.printStackTrace();
+		  }		
 	}
 
 
